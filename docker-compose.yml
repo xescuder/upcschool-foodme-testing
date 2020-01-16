@@ -1,0 +1,32 @@
+
+version: "2"
+services:
+  app:
+    container_name: app
+    build: './webapp'
+    ports:
+      - "3000:3000"
+    depends_on:
+      - firefox-container
+    volumes:
+      - ./webapp:/webapp
+
+  firefox-container:
+    container_name: firefox-container
+    image: selenium/standalone-firefox:3.12.0-americium
+    ports:
+      - "4444:4444"
+    # can just be expose - 4444, but this allows you to see localhost:4444/wd/hub/static/resource/hub.html
+
+
+  graphite:
+    container_name: graphite
+    image: hopsoft/graphite-statsd
+    ports:
+      - "81:80"
+      - "82:81"
+      - "2003-2004:2003-2004"
+      - "2023-2024:2023-2024"
+      - "8125:8125/udp"
+      - "8126:8126"
+    restart: always
